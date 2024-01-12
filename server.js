@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import Admin from "./Routes/Admin.js";
 
 dotenv.config();
 
@@ -11,6 +12,9 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+//Routes
+app.use('/api/admin', Admin);
 
 mongoose
   .connect(process.env.MONGO)
