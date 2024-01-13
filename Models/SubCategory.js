@@ -7,11 +7,11 @@ const SubCategorySchema = new Schema({
     required: true,
     unique: true,
   },
-  // products: [{
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Product',
-  //   autopopulate: true,
-  // }],
+  products: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Product',
+    autopopulate: true,
+  }],
   icon: { //might make a default value later
     type: String,
     required: true,

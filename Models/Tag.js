@@ -7,11 +7,11 @@ const TagSchema = new Schema({
     required: true,
     unique: true,
   },
-  // products: [{
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Product',
-  //   autopopulate: true,
-  // }],
+  products: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Product',
+    autopopulate: true,
+  }],
 }, {timestamps: true,});
 
 TagSchema.plugin(autopopulate);
