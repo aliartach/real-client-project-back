@@ -8,11 +8,15 @@ import subCategoryRoutes from "./Routes/SubCategory.js";
 import tagRoutes from "./Routes/Tag.js";
 import OrderedProductRoutes from "./Routes/OrderedProduct.js";
 import orderRoutes from "./Routes/Order.js";
+import Admin from "./Routes/Admin.js";
+import cookieParser from "cookie-parser";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
 
@@ -23,6 +27,7 @@ app.use("/api/tag", tagRoutes);
 app.use("/api/subcategory", subCategoryRoutes);
 app.use("/api/orderedProduct", OrderedProductRoutes);
 app.use("/api/order", orderRoutes);
+app.use('/api/admin', Admin);
 
 mongoose
   .connect(process.env.MONGO)
