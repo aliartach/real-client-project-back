@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Admin from '../Models/Admin.js';
 import mongoose from 'mongoose';
-
-dotenv.config();
 
 export const getAdmins = async (req, res) => {
   try {
@@ -70,10 +67,13 @@ export const login = async (req, res) => {
   const secretKey = process.env.JWT_SECRET;
 
   try {
+    if (!secretKey) {
+      throw new Error('JWT secret key not configured.');
+    }
     const admin = await Admin.findOne({ username });
 
     if (!admin || !(await bcrypt.compare(password, admin.password))) {
-      return res.status(401).json({ message: 'Invalid username or password!' });
+      return res.status(401).json({ error: 'Invalid username or password!' });
     }
 
     const token = jwt.sign({ id: admin._id }, secretKey, { expiresIn: '1h' });

@@ -4,12 +4,14 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import Admin from "./Routes/Admin.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
 
