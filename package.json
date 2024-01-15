@@ -21,7 +21,6 @@
     "mongoose": "^8.0.3",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.2",
-    "password-validator": "^5.3.0",
     "tr46": "^5.0.0"
   }
 }
