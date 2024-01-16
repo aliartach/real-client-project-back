@@ -1,5 +1,6 @@
 import Content from '../Models/Content.js'
 
+// update a content
 export const updateContent = async (req, res) => {
     const {firstDescription, featuredDescription, storyDescription } = req.body;
     const contentId = req.params.id;
@@ -27,7 +28,8 @@ export const updateContent = async (req, res) => {
           res.status(500).json({ message: 'Internal Server Error' });
         }
       };
-      
+
+// get all the content
 export const getAllContent = async (req, res) => {
     try {
         const contents = await Content.find();
@@ -38,6 +40,7 @@ export const getAllContent = async (req, res) => {
     }
 };
 
+// get a content by id
 export const getContentById = async (req, res) => {
     const contentId = req.params.id;
   
