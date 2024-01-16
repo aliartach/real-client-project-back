@@ -16,4 +16,6 @@ const TagSchema = new Schema({
 
 TagSchema.plugin(autopopulate);
 
-export default model('Tag', TagSchema);
+const Tag = model('Tag', TagSchema);
+
+export default Tag;

@@ -1,4 +1,3 @@
-
 import Tag from "../Models/Tag.js";
 import Product from "../Models/Product.js";
 export const getAllTags = async (req, res) => {
