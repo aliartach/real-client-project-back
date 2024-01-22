@@ -3,22 +3,26 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import contentRoutes from "./Routes/Content.js";
 import productRoutes from "./Routes/Product.js";
 import subCategoryRoutes from "./Routes/SubCategory.js";
 import tagRoutes from "./Routes/Tag.js";
 import OrderedProductRoutes from "./Routes/OrderedProduct.js";
 import orderRoutes from "./Routes/Order.js";
 import Admin from "./Routes/Admin.js";
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
+
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
+app.use("/api/content", contentRoutes)
+
 
 // Routes
 app.use("/images", express.static("images"));
