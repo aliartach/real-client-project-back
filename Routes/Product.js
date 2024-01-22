@@ -3,6 +3,7 @@ import Upload from '../Middlewares/Multer.js';
 import {
   createProduct,
   getAllProducts,
+  getFeaturedProducts,
   getProductById,
   updateProductById,
   deleteProductById,
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.post('/', Upload.single("image"), createProduct);
 router.get('/', getAllProducts);
+router.get('/featured', getFeaturedProducts);
 router.get('/:id', getProductById);
 router.patch('/:id', Upload.single("image"), updateProductById);
 router.delete('/:id', deleteProductById);
