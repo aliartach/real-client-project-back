@@ -2,32 +2,32 @@ import Content from '../Models/Content.js'
 
 // update a content
 export const updateContent = async (req, res) => {
-    const {firstDescription, featuredDescription, storyDescription } = req.body;
-    const contentId = req.params.id;
-    const {imageCat, imageDog} = req.file.path;
+  const { id } = req.params; 
+  const { body } = req;
 
-    try{
+  try {
+      const updatedContent = await Content.findByIdAndUpdate(
+          id,
+          {
+              ...body,
+              ...(req.file && { imageCat }),
+              ...(req.file && { imageDog }),
+          },
+          { new: true }  // Return the updated document
+      );
 
-        const content = await Content.findById(contentId);
+      if (!updatedContent) {
+          return res.status(404).json({ message: 'Content not found' });
+      }
 
-        if (!content) {
-            return res.status(404).json({ message: 'Content not found' });
-          }
-        //   update the fields
-          content.firstDescription = firstDescription;
-          content.featuredDescription = featuredDescription;
-          content.storyDescription = storyDescription;
-          content.imageCat = imageCat;
-          content.imageDog = imageDog;
-          
-          const updatedContent = await content.save();
+      return res.status(200).json({ message: 'Content updated successfully!', content: updatedContent });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: err.message });
+  }
+};
 
-          res.json(updatedContent);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ message: 'Internal Server Error' });
-        }
-      };
+
 
 // get all the content
 export const getAllContent = async (req, res) => {
@@ -57,3 +57,31 @@ export const getContentById = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
+
+// Create a new content
+export const createContent = async (req, res) => {
+  const { firstDescription, featuredDescription, storyDescription } = req.body;
+  const imageCat = req.files['imageCat'] ? req.files['imageCat'][0].path : null;
+  const imageDog = req.files['imageDog'] ? req.files['imageDog'][0].path : null;
+ 
+  try {
+     // Create a new content instance
+     const newContent = new Content({
+       firstDescription,
+       featuredDescription,
+       storyDescription,
+       imageCat,
+       imageDog,
+     });
+ 
+     // Save the content to the database
+     const savedContent = await newContent.save();
+ 
+     res.status(201).json({ message: 'Content created successfully!', content: savedContent });
+  } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: 'Internal Server Error' });
+  }
+ };
+ 
