@@ -2,32 +2,32 @@ import Content from '../Models/Content.js'
 
 // update a content
 export const updateContent = async (req, res) => {
-    const {firstDescription, featuredDescription, storyDescription } = req.body;
-    const contentId = req.params.id;
-    const {imageCat, imageDog} = req.file.path;
+  const { ContentId } = req.params;
+  const imageCat = req.file?.path;
+  const imageDog = req.file?.path;
 
-    try{
+  try {
+    if (req.body) {
+      const updatedContent = await Content.findByIdAndUpdate(
+        ContentId,
+        { ...req.body, imageCat, imageDog },
+       
+      );
 
-        const content = await Content.findById(contentId);
+      if (!updatedContent) {
+        return res.status(404).json({ message: 'Content not found' });
+      }
 
-        if (!content) {
-            return res.status(404).json({ message: 'Content not found' });
-          }
-        //   update the fields
-          content.firstDescription = firstDescription;
-          content.featuredDescription = featuredDescription;
-          content.storyDescription = storyDescription;
-          content.imageCat = imageCat;
-          content.imageDog = imageDog;
-          
-          const updatedContent = await content.save();
+      return res.status(200).json({ message: 'Content updated successfully!', Content: updatedContent });
+    }
 
-          res.json(updatedContent);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ message: 'Internal Server Error' });
-        }
-      };
+    res.status(400).json({ message: 'Something went wrong' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 // get all the content
 export const getAllContent = async (req, res) => {

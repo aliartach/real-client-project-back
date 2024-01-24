@@ -6,7 +6,6 @@ import Tag from "../Models/Tag.js";
 export const createProduct = async(req, res) => {
   try {
     const { sub_categories, tags } = req.body;
-
     const new_product = new Product(req.body);
 
     if (req.file) {
