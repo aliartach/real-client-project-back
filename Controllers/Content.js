@@ -6,24 +6,43 @@ export const updateContent = async (req, res) => {
   try {
     const { firstDescription, featuredDescription, storyDescription } = req.body;
 
-    // Check if req.files is an object with the expected properties
-    if (!req.files || !req.files.imageCat || !req.files.imageDog) {
-      return res.status(400).json({ error: 'Invalid file structure in request.' });
+    // Check if req.files is an object
+    if (!req.files) {
+      // If no files are uploaded, update other fields without checking for imageCat or imageDog
+      const updatedContent = await Content.findByIdAndUpdate(
+        req.params.id,
+        {
+          firstDescription,
+          featuredDescription,
+          storyDescription,
+        },
+        { new: true }
+      );
+
+      return res.status(200).json(updatedContent);
     }
 
-    // Get file paths from Multer upload
-    const imageCat = req.files.imageCat[0].path;
-    const imageDog = req.files.imageDog[0].path;
+    // Get existing content
+    const existingContent = await Content.findById(req.params.id);
+
+    // Update only the specified fields
+    const updatedFields = {
+      firstDescription: firstDescription || existingContent.firstDescription,
+      featuredDescription: featuredDescription || existingContent.featuredDescription,
+      storyDescription: storyDescription || existingContent.storyDescription,
+    };
+
+    if (req.files.imageCat) {
+      updatedFields.imageCat = req.files.imageCat[0].path;
+    }
+
+    if (req.files.imageDog) {
+      updatedFields.imageDog = req.files.imageDog[0].path;
+    }
 
     const updatedContent = await Content.findByIdAndUpdate(
       req.params.id,
-      {
-        firstDescription,
-        featuredDescription,
-        storyDescription,
-        imageCat,
-        imageDog,
-      },
+      updatedFields,
       { new: true }
     );
 
