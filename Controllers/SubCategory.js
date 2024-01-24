@@ -70,7 +70,7 @@ export const getAllSubCategories = async (req, res) => {
       var found_all_products_flag = true;
       var wrong_products_input = [];
   
-      for (let i = 0; i < products.length; i++) {
+      for (let i = 0; i < products?.length; i++) {
         var product = await Product.findById(products[i]);
   
         if (!product) {

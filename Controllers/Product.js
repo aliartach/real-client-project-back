@@ -17,7 +17,7 @@ export const createProduct = async(req, res) => {
     var wrong_subcategories_input = []; // to record any wrong sub category id entered
     var wrong_tags_input = [];
 
-    for (let i=0; i < sub_categories.length; i++) {
+    for (let i=0; i < sub_categories?.length; i++) {
       var sub_category = await SubCategory.findById(sub_categories[i]);
       if (!sub_category) {
         wrong_subcategories_input.push(sub_categories[i])
@@ -28,7 +28,7 @@ export const createProduct = async(req, res) => {
       return res.status(404).json({error: `sub categories with ids ${wrong_subcategories_input} not found`})
     }
 
-    for (let i=0; i < tags.length; i++) {
+    for (let i=0; i < tags?.length; i++) {
       var tag = await Tag.findById(tags[i]);
       if (!tag) {
         wrong_tags_input.push(tags[i])
@@ -46,10 +46,20 @@ export const createProduct = async(req, res) => {
   }
 }
 
-// get all product
+// get all products
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// get featured products
+export const getFeaturedProducts = async (req, res) => {
+  try {
+    const products = await Product.find({featured: true});
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -84,7 +94,7 @@ export const updateProductById = async (req, res) => {
     var wrong_subcategories_input = []; // to record any wrong sub category id entered
     var wrong_tags_input = [];
 
-    for (let i=0; i < sub_categories.length; i++) {
+    for (let i=0; i < sub_categories?.length; i++) {
       var sub_category = await SubCategory.findById(sub_categories[i]);
       if (!sub_category) {
         wrong_subcategories_input.push(sub_categories[i])
@@ -95,7 +105,7 @@ export const updateProductById = async (req, res) => {
       return res.status(404).json({error: `sub categories with ids ${wrong_subcategories_input} not found`})
     }
 
-    for (let i=0; i < tags.length; i++) {
+    for (let i=0; i < tags?.length; i++) {
       var tag = await Tag.findById(tags[i]);
       if (!tag) {
         wrong_tags_input.push(tags[i])

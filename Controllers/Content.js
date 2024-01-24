@@ -2,31 +2,31 @@ import Content from '../Models/Content.js'
 
 // update a content
 export const updateContent = async (req, res) => {
-  const { ContentId } = req.params;
-  const imageCat = req.file?.path;
-  const imageDog = req.file?.path;
+  const { id } = req.params; 
+  const { body } = req;
 
   try {
-    if (req.body) {
       const updatedContent = await Content.findByIdAndUpdate(
-        ContentId,
-        { ...req.body, imageCat, imageDog },
-       
+          id,
+          {
+              ...body,
+              ...(req.file && { imageCat }),
+              ...(req.file && { imageDog }),
+          },
+          { new: true }  // Return the updated document
       );
 
       if (!updatedContent) {
-        return res.status(404).json({ message: 'Content not found' });
+          return res.status(404).json({ message: 'Content not found' });
       }
 
-      return res.status(200).json({ message: 'Content updated successfully!', Content: updatedContent });
-    }
-
-    res.status(400).json({ message: 'Something went wrong' });
+      return res.status(200).json({ message: 'Content updated successfully!', content: updatedContent });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: err.message });
+      console.error(err);
+      res.status(500).json({ message: err.message });
   }
 };
+
 
 
 // get all the content
@@ -57,3 +57,31 @@ export const getContentById = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
+
+// Create a new content
+export const createContent = async (req, res) => {
+  const { firstDescription, featuredDescription, storyDescription } = req.body;
+  const imageCat = req.files['imageCat'] ? req.files['imageCat'][0].path : null;
+  const imageDog = req.files['imageDog'] ? req.files['imageDog'][0].path : null;
+ 
+  try {
+     // Create a new content instance
+     const newContent = new Content({
+       firstDescription,
+       featuredDescription,
+       storyDescription,
+       imageCat,
+       imageDog,
+     });
+ 
+     // Save the content to the database
+     const savedContent = await newContent.save();
+ 
+     res.status(201).json({ message: 'Content created successfully!', content: savedContent });
+  } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: 'Internal Server Error' });
+  }
+ };
+ 

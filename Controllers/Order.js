@@ -15,7 +15,7 @@ export const createOrder = async (req, res) => {
     var total_price = 0;
     var total_quantity = 0;
     var error = false;
-    for (var i = 0; i < orderedProducts.length; i++) {
+    for (var i = 0; i < orderedProducts?.length; i++) {
       const ordered_product = await OrderedProduct.findById(orderedProducts[i]);
 
       if (ordered_product) {
