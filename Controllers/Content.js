@@ -4,28 +4,31 @@ import Content from '../Models/Content.js'
 export const updateContent = async (req, res) => {
   const { id } = req.params; 
   const { body } = req;
-
+  const imageCat = req.files['imageCat'] ? req.files['imageCat'][0].path : null;
+  const imageDog = req.files['imageDog'] ? req.files['imageDog'][0].path : null;
+  
   try {
-      const updatedContent = await Content.findByIdAndUpdate(
-          id,
-          {
-              ...body,
-              ...(req.file && { imageCat }),
-              ...(req.file && { imageDog }),
-          },
-          { new: true }  // Return the updated document
-      );
+    const updatedContent = await Content.findByIdAndUpdate(
+      id,
+      {
+        ...body,
+        ...(req.files['imageCat'] && { imageCat }),
+        ...(req.files['imageDog'] && { imageDog }),
+      },
+      { new: true }  // Return the updated document
+    );
 
-      if (!updatedContent) {
-          return res.status(404).json({ message: 'Content not found' });
-      }
+    if (!updatedContent) {
+      return res.status(404).json({ message: 'Content not found' });
+    }
 
-      return res.status(200).json({ message: 'Content updated successfully!', content: updatedContent });
+    return res.status(200).json({ message: 'Content updated successfully!', content: updatedContent });
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: err.message });
   }
 };
+
 
 
 
