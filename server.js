@@ -11,6 +11,8 @@ import OrderedProductRoutes from "./Routes/OrderedProduct.js";
 import orderRoutes from "./Routes/Order.js";
 import Admin from "./Routes/Admin.js";
 import cookieParser from 'cookie-parser';
+import multer from 'multer';
+import uploadMiddleware from "./Middlewares/Multer.js"
 
 
 dotenv.config();
