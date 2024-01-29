@@ -50,7 +50,7 @@ export const createProduct = async(req, res) => {
 // get all products
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate('sub_categories').populate('tags');
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -60,7 +60,7 @@ export const getAllProducts = async (req, res) => {
 // get featured products
 export const getFeaturedProducts = async (req, res) => {
   try {
-    const products = await Product.find({featured: true});
+    const products = await Product.find({featured: true}).populate('sub_categories').populate('tags');
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -70,7 +70,7 @@ export const getFeaturedProducts = async (req, res) => {
 // get product by id
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('sub_categories').populate('tags');
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
