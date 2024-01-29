@@ -8,7 +8,7 @@ export const getAdmins = async (req, res) => {
     const admins = await Admin.find();
     res.status(200).json(admins);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "test", error: error.message });
   }
 };
 
@@ -41,7 +41,7 @@ export const register = async (req, res) => {
     // Here we check if the admin already exists
     const existingAdmin = await Admin.findOne({ username });
     if (existingAdmin) {
-      return res.status(400).json({ message: 'username already in use!' });
+      return res.status(400).json({ message: 'Username already in use!' });
     }
 
     // Here we check if the password and confirmPassword match
@@ -77,8 +77,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: admin._id }, secretKey, { expiresIn: '1h' });
-    res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 });
-    res.status(200).json({ message: 'Logged in Successfully!', admin: admin._id });
+    res.status(200).json({ message: 'Logged in Successfully!', token });
 
   } catch (error) {
     console.error(error);
