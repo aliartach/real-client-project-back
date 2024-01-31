@@ -32,8 +32,8 @@ const ProductSchema = new Schema({
   },
   category: {
     type: String,
-    required: true,
     enum: ['Cats and Dogs', 'Dogs'],
+    default: 'Dogs',
   },
   quantity: {
     type: Number,
