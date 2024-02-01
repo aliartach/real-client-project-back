@@ -11,6 +11,7 @@ const SubCategorySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Product',
     autopopulate: true,
+    allownull:true,
   }],
   icon: { //might make a default value later
     type: String,
