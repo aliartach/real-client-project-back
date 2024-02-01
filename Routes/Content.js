@@ -9,9 +9,9 @@ import {
 import Upload from '../Middlewares/Multer.js';
 const router = express.Router();
 
-router.put('/:id', uploadContentImages, updateContent)
+router.patch('/:id', Upload.fields([{ name: 'imageCat', maxCount: 1 }, { name: 'imageDog', maxCount: 1 }]), updateContent);
 router.get('/', getAllContent)
 router.get('/:id', getContentById)
-router.post('/create', uploadContentImages, createContent)
+router.post('/', Upload.fields([{ name: 'imageCat', maxCount: 1 }, { name: 'imageDog', maxCount: 1 }]), createContent);
 
 export default router;

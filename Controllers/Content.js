@@ -3,29 +3,26 @@ import multer from "../Middlewares/Multer.js"
 
 // update a content
 export const updateContent = async (req, res) => {
+  const { ContentId } = req.params;
   try {
     const { firstDescription, featuredDescription, storyDescription } = req.body;
 
-    // Check if req.files is an object
+  
     if (!req.files) {
-      // If no files are uploaded, update other fields without checking for imageCat or imageDog
+   
       const updatedContent = await Content.findByIdAndUpdate(
-        req.params.id,
-        {
-          firstDescription,
-          featuredDescription,
-          storyDescription,
-        },
+        ContentId,
+        updatedFields,
         { new: true }
       );
 
       return res.status(200).json(updatedContent);
     }
 
-    // Get existing content
+   
     const existingContent = await Content.findById(req.params.id);
 
-    // Update only the specified fields
+  
     const updatedFields = {
       firstDescription: firstDescription || existingContent.firstDescription,
       featuredDescription: featuredDescription || existingContent.featuredDescription,
@@ -84,34 +81,29 @@ export const getContentById = async (req, res) => {
   };
 
 // create a content
+// Create a new content
 export const createContent = async (req, res) => {
+  const { firstDescription, featuredDescription, storyDescription } = req.body;
+  const imageCat = req.files['imageCat'] ? req.files['imageCat'][0].path : null;
+  const imageDog = req.files['imageDog'] ? req.files['imageDog'][0].path : null;
+
   try {
-    console.log(req.files);
+     // Create a new content instance
+     const newContent = new Content({
+       firstDescription,
+       featuredDescription,
+       storyDescription,
+       imageCat,
+       imageDog,
+     });
 
-    const { firstDescription, featuredDescription, storyDescription } = req.body;
+     // Save the content to the database
+     const savedContent = await newContent.save();
 
-    // Check if req.files is an object with the expected properties
-    if (!req.files || !req.files.imageCat || !req.files.imageDog) {
-      return res.status(400).json({ error: 'Invalid file structure in request.' });
-    }
-
-    // Get file paths from Multer upload
-    const imageCat = req.files.imageCat[0].path;
-    const imageDog = req.files.imageDog[0].path;
-
-    const newContent = new Content({
-      firstDescription,
-      featuredDescription,
-      storyDescription,
-      imageCat,
-      imageDog,
-    });
-
-    const savedContent = await newContent.save();
-
-    res.status(201).json(savedContent);
+     res.status(201).json({ message: 'Content created successfully!', content: savedContent });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+     console.error(error);
+     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+ };
 
