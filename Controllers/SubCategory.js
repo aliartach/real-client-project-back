@@ -28,13 +28,18 @@ export const getAllSubCategories = async (req, res) => {
   };
   export const createSubCategory = async (req, res) => {
     try {
-      const { products } = req.body; 
-      const new_sub_category = new SubCategory(req.body);
+      const { products } = req.body;
   
+      // Ensure req.body and req.body.products are defined
+      if (!req.body || !req.body.products) {
+        return res.status(400).json({ error: "Invalid request payload" });
+      }
+  
+      const new_sub_category = new SubCategory(req.body);
       if (req.file) {
         new_sub_category.icon = req.file.path;
       }
-  
+      console.log("get icon", new_sub_category.icon)
       var found_all_products_flag = true; //indicate whether all the products specified in the products array have been found in the database.
       var wrong_products_input = []; // This array is used to collect the IDs of the products that were not found in the database.It starts as an empty array.During the loop, if a product is not found, its ID is added to this array.
   
@@ -54,10 +59,10 @@ export const getAllSubCategories = async (req, res) => {
       const subCategory = await new_sub_category.save();
       res.status(200).json(subCategory);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      console.error("Error creating subcategory:", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   };
-  
   export const updateSubCategory = async (req, res) => {
     try {
       const { products } = req.body; // Corrected: Use 'products' instead of 'Product'
