@@ -35,10 +35,9 @@ export const getAllSubCategories = async (req, res) => {
         new_sub_category.icon = req.file.path;
       }
   
-      var found_all_products_flag = true;
-      var wrong_products_input = [];
-      
-      
+      var found_all_products_flag = true; //indicate whether all the products specified in the products array have been found in the database.
+      var wrong_products_input = []; // This array is used to collect the IDs of the products that were not found in the database.It starts as an empty array.During the loop, if a product is not found, its ID is added to this array.
+  
       for (let i = 0; i < products?.length; i++) {
         var product = await Product.findById(products[i]);
   

@@ -1,5 +1,4 @@
 import {Schema, model} from 'mongoose';
-import autopopulate from 'mongoose-autopopulate';
 
 const ProductSchema = new Schema({
   name: {
@@ -10,12 +9,10 @@ const ProductSchema = new Schema({
   sub_categories: [{
     type: Schema.Types.ObjectId,
     ref: 'SubCategory',
-    autopopulate: true,
   }],
   tags: [{
     type: Schema.Types.ObjectId,
     ref: 'Tag',
-    autopopulate: true,
   }],
   description: {
     type: String,
@@ -48,8 +45,6 @@ const ProductSchema = new Schema({
   },
   
 }, {timestamps: true,});
-
-ProductSchema.plugin(autopopulate);
 
 const Product = model('Product', ProductSchema);
 

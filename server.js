@@ -11,6 +11,8 @@ import OrderedProductRoutes from "./Routes/OrderedProduct.js";
 import orderRoutes from "./Routes/Order.js";
 import Admin from "./Routes/Admin.js";
 import cookieParser from 'cookie-parser';
+import multer from 'multer';
+import uploadMiddleware from "./Middlewares/Multer.js"
 
 
 dotenv.config();
@@ -21,7 +23,7 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
-app.use("/api/content", contentRoutes)
+
 
 
 // Routes
@@ -32,6 +34,7 @@ app.use("/api/subcategory", subCategoryRoutes);
 app.use("/api/orderedProduct", OrderedProductRoutes);
 app.use("/api/order", orderRoutes);
 app.use('/api/admin', Admin);
+app.use("/api/content", contentRoutes);
 
 mongoose
   .connect(process.env.MONGO)
